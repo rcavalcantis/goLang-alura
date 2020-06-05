@@ -50,7 +50,9 @@ func choosingOperation(operation int) {
 func startMonitoring(){
 	fmt.Println("Monitoring...")
 	site := "https://www.alura.com.br"
-	http.Get(site)
+	resp, err := http.Get(site)
+	fmt.Println(resp)
+	fmt.Println(err)
 }
 
 func printingLog(){
