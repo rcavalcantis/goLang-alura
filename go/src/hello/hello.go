@@ -50,11 +50,7 @@ func choosingOperation(operation int) {
 }
 func startMonitoring() {
 	fmt.Println("Monitoring...")
-	var sites [4]string
-	sites[0] = "https://random-status-code.herokuapp.com/"
-	sites[1] = "https://www.alura.com.br/"
-	sites[2] = "https://uol.com.br/"
-
+	sites := getSites()
 	for i := 0; i < len(sites); i++ {
 		if sites[i] == "" {
 			break
@@ -72,10 +68,7 @@ func printingLog() {
 	fmt.Println("Printing Log...")
 }
 
-func getSites() [4]string {
-	var sites [4]string
-	sites[0] = "https://random-status-code.herokuapp.com/"
-	sites[1] = "https://www.alura.com.br/"
-	sites[2] = "https://uol.com.br/"
+func getSites() []string {
+	sites := []string{"https://random-status-code.herokuapp.com/", "https://www.alura.com.br/", "https://uol.com.br/"}
 	return sites
 }
