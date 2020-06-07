@@ -44,6 +44,8 @@ func choosingOperation(operation int) {
 		startMonitoring()
 	case 2:
 		printingLog()
+	case 3: 
+		fmt.Println(readSitesFile())
 	case 0:
 		fmt.Println("Shutdown!")
 		os.Exit(0)
@@ -65,7 +67,8 @@ func startMonitoring() {
 }
 
 func testSite(site string){
-	resp, _ := http.Get(site)
+	resp, err := http.Get(site)
+	catchError(err)
 	if resp.StatusCode == 200 {
 		fmt.Println("Site: ", " - ", site, "Status: UP")
 	} else {
@@ -80,4 +83,19 @@ func printingLog() {
 func getSites() []string {
 	sites := []string{"https://random-status-code.herokuapp.com/", "https://www.alura.com.br/", "https://uol.com.br/"}
 	return sites
+}
+
+func readSitesFile() []string{
+	var sites []string
+	_, err := os.Open("sites1.txt")
+	catchError(err)
+	//sites = os.ReadFile(sitesFile)
+	return sites
+}
+
+func catchError(err error){
+	if err != nil {
+		fmt.Println("Error when open file: ", err)
+		os.Exit(-1)
+	}	
 }
