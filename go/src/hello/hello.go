@@ -51,15 +51,12 @@ func choosingOperation(operation int) {
 func startMonitoring() {
 	fmt.Println("Monitoring...")
 	sites := getSites()
-	for i := 0; i < len(sites); i++ {
-		if sites[i] == "" {
-			break
-		}
-		resp, _ := http.Get(sites[i])
+	for i, site := range sites {
+		resp, _ := http.Get(site)
 		if resp.StatusCode == 200 {
-			fmt.Println("Site: ", sites[i], "Status: UP")
+			fmt.Println("Site: ", i, " - ", site, "Status: UP")
 		} else {
-			fmt.Println("Site: ", sites[i], "Status: DOWN", "Status-Code:", resp.StatusCode)
+			fmt.Println("Site: ", i, " - ", site, "Status: DOWN", "Status-Code:", resp.StatusCode)
 		}
 	}
 }
