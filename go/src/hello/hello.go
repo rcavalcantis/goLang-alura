@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"io/ioutil"
+	"bufio"
 )
 
 const amountMonitoring = 5
@@ -28,6 +30,7 @@ func showIntroduction() {
 func showMenu() {
 	fmt.Println("1- Start monitoring")
 	fmt.Println("2- Show logs")
+	fmt.Println("3- Start monitoring Files Sites")
 	fmt.Println("0- Shutdown")
 	fmt.Println("")
 }
@@ -41,11 +44,11 @@ func choosingOperation(operation int) {
 
 	switch operation {
 	case 1:
-		startMonitoring()
+		startMonitoring(1)
 	case 2:
 		printingLog()
 	case 3: 
-		fmt.Println(readSitesFile())
+		startMonitoring(3)
 	case 0:
 		fmt.Println("Shutdown!")
 		os.Exit(0)
@@ -54,9 +57,15 @@ func choosingOperation(operation int) {
 		os.Exit(-1)
 	}
 }
-func startMonitoring() {
+func startMonitoring(option int) {
 	fmt.Println("Monitoring...")
-	sites := getSites()
+	var sites []string
+	switch option {
+		case 1:
+			sites = getSites()
+		case 3:
+			sites = loadSitesFile()
+	}
 	for i := 0; i <= amountMonitoring; i++ {
 		for _, site := range sites {
 			testSite(site)
@@ -68,7 +77,7 @@ func startMonitoring() {
 
 func testSite(site string){
 	resp, err := http.Get(site)
-	catchError(err)
+	catchError(err, "testSite-http.Get")
 	if resp.StatusCode == 200 {
 		fmt.Println("Site: ", " - ", site, "Status: UP")
 	} else {
@@ -85,17 +94,30 @@ func getSites() []string {
 	return sites
 }
 
-func readSitesFile() []string{
+func readSitesFile() string{
+	sitesFile, err := ioutil.ReadFile("sites.txt")
+	catchError(err, "readSitesFile-ioutil.ReadFile")
+	return string(sitesFile)
+}
+
+func loadSitesFile() []string {
 	var sites []string
-	_, err := os.Open("sites1.txt")
-	catchError(err)
-	//sites = os.ReadFile(sitesFile)
+	sitesFile, err := os.Open("sites.txt")
+	if err != nil {
+		catchError(err, "loadSitesFile-os.Open")
+	}
+	reader := bufio.NewReader(sitesFile)	
+	line, err := reader.ReadString('\n')
+	if err != nil {
+		catchError(err, "reader.ReadString")
+	}
+	sites = append(sites, line)
 	return sites
 }
 
-func catchError(err error){
+func catchError(err error, operation string){
 	if err != nil {
-		fmt.Println("Error when open file: ", err)
+		fmt.Println("Fail Operation: [", operation, "] - ", err)
 		os.Exit(-1)
 	}	
 }
