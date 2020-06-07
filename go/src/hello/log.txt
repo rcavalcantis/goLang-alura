@@ -1,0 +1,12 @@
+07/06/2020 19:01:09 | https://random-status-code.herokuapp.com/ - Status: true
+07/06/2020 19:01:10 | https://www.alura.com.br/ - Status: true
+07/06/2020 19:01:10 | https://uol.com.br/ - Status: true
+07/06/2020 19:01:17 | https://random-status-code.herokuapp.com/ - Status: false
+07/06/2020 19:01:17 | https://www.alura.com.br/ - Status: true
+07/06/2020 19:01:18 | https://uol.com.br/ - Status: true
+07/06/2020 19:03:54 | https://random-status-code.herokuapp.com/ - Status: true
+07/06/2020 19:03:55 | https://www.alura.com.br/ - Status: true
+07/06/2020 19:03:55 | https://uol.com.br/ - Status: true
+07/06/2020 19:04:01 | https://random-status-code.herokuapp.com/ - Status: true
+07/06/2020 19:04:01 | https://www.alura.com.br/ - Status: true
+07/06/2020 19:04:02 | https://uol.com.br/ - Status: true

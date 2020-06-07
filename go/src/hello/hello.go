@@ -92,6 +92,9 @@ func testSite(site string){
 
 func printingLog() {
 	fmt.Println("Printing Log...")
+	fileLog, err := ioutil.ReadFile("log.txt")
+	catchError(err, "printLog-oiutil.ReadFile")
+	fmt.Println(string(fileLog))	
 }
 
 func getSites() []string {
