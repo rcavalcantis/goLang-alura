@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 )
+
+const amountMonitoring = 5
+const delay = 5
 
 func main() {
 	for {
@@ -51,13 +55,21 @@ func choosingOperation(operation int) {
 func startMonitoring() {
 	fmt.Println("Monitoring...")
 	sites := getSites()
-	for i, site := range sites {
-		resp, _ := http.Get(site)
-		if resp.StatusCode == 200 {
-			fmt.Println("Site: ", i, " - ", site, "Status: UP")
-		} else {
-			fmt.Println("Site: ", i, " - ", site, "Status: DOWN", "Status-Code:", resp.StatusCode)
+	for i := 0; i <= amountMonitoring; i++ {
+		for _, site := range sites {
+			testSite(site)
 		}
+		time.Sleep(delay * time.Second)
+		fmt.Println("")
+	}
+}
+
+func testSite(site string){
+	resp, _ := http.Get(site)
+	if resp.StatusCode == 200 {
+		fmt.Println("Site: ", " - ", site, "Status: UP")
+	} else {
+		fmt.Println("Site: ", " - ", site, "Status: DOWN", "Status-Code:", resp.StatusCode)
 	}
 }
 
