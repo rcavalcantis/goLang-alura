@@ -9,9 +9,10 @@ import (
 	"io/ioutil"
 	"bufio"
 	"strings"
+	"strconv"
 )
 
-const amountMonitoring = 5
+const amountMonitoring = 1
 const delay = 5
 
 func main() {
@@ -82,8 +83,10 @@ func testSite(site string){
 	catchError(err, "testSite-http.Get")
 	if resp.StatusCode == 200 {
 		fmt.Println("Site: ", " - ", site, "Status: UP")
+		recordLog(site, true)
 	} else {
 		fmt.Println("Site: ", " - ", site, "Status: DOWN", "Status-Code:", resp.StatusCode)
+		recordLog(site, false)
 	}
 }
 
@@ -130,4 +133,13 @@ func catchError(err error, operation string){
 		fmt.Println("Fail Operation: [", operation, "] - ", err)
 		os.Exit(-1)
 	}	
+}
+
+func recordLog(site string, status bool){
+	logFile, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0755)
+	if err != nil{
+		fmt.Println("Error on file log.txt")
+	}
+	logFile.WriteString(time.Now().Format("02/01/2006 15:04:05") +" | "+ site + " - Status: " + strconv.FormatBool(status) + "\n")
+	logFile.Close()
 }
