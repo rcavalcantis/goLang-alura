@@ -5,8 +5,10 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"io"
 	"io/ioutil"
 	"bufio"
+	"strings"
 )
 
 const amountMonitoring = 5
@@ -107,11 +109,19 @@ func loadSitesFile() []string {
 		catchError(err, "loadSitesFile-os.Open")
 	}
 	reader := bufio.NewReader(sitesFile)	
-	line, err := reader.ReadString('\n')
-	if err != nil {
-		catchError(err, "reader.ReadString")
+	for{
+		line, err := reader.ReadString('\n')
+		if err != nil && err != io.EOF {
+			catchError(err, "reader.ReadString")
+		}
+		line = strings.TrimSpace(line)
+		fmt.Println("TEST PRINT LINE: ", line)
+		sites = append(sites, line)
+		if err == io.EOF {
+			break
+		}		
 	}
-	sites = append(sites, line)
+	sitesFile.Close()
 	return sites
 }
 
